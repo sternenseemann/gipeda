@@ -1,4 +1,4 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving, ConstraintKinds, TypeFamilies #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving, ConstraintKinds, TypeFamilies, TypeOperators #-}
 module Development.Shake.Fancy
     ( module Development.Shake
 
