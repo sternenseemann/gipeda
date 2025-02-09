@@ -10,6 +10,7 @@ import GHC.Generics
 import Data.Maybe
 import Data.Functor
 
+import JsonUtils (stringToKey)
 import Paths
 import ReadResult
 import ReportTypes
@@ -36,9 +37,9 @@ graphReportMain (bench:revs) = do
                                 let comp = makeComparison s bench (value result) (Just (value prevResult))
                                 in return $ changeType comp
 
-                return $ Just $ T.pack rev .= object
+                return $ Just $ stringToKey rev .= object
                         [ "benchResults" .= object
-                            [ T.pack bench .= GraphPoint
+                            [ stringToKey bench .= GraphPoint
                                 { gpValue = value result
                                 , gpChangeType = changeType
                                 }
@@ -47,7 +48,7 @@ graphReportMain (bench:revs) = do
     let doc = object
                 [ "revisions" .= object (catMaybes g)
                 , "benchmarkSettings" .= object
-                    [ T.pack bench .= toJSON s ]
+                    [ stringToKey bench .= toJSON s ]
                 ]
 
     BS.putStr (encode doc)

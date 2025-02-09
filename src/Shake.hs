@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveDataTypeable, GeneralizedNewtypeDeriving, NondecreasingIndentation, TypeFamilies #-}
+{-# LANGUAGE DeriveDataTypeable, GeneralizedNewtypeDeriving, NondecreasingIndentation, TypeFamilies, CPP #-}
 module Shake where
 
 import Development.Shake.Fancy hiding (withTempFile)
@@ -17,7 +17,6 @@ import qualified System.Directory
 import System.Directory (getPermissions, setPermissions, setOwnerExecutable)
 import System.Environment (getExecutablePath)
 import Data.Aeson
-import qualified Data.Text as T
 
 import Development.Shake.Gitlib
 
@@ -358,7 +357,7 @@ shakeMain = do
                 Right rep -> return (rep :: Value)
 
         let o = object
-                [ T.pack "tags" .= object [ (T.pack t .= h) | (t,h) <- zip tags tagsHashes ]
+                [ stringToKey "tags" .= object [ (stringToKey t .= h) | (t,h) <- zip tags tagsHashes ]
                 ]
         liftIO $ LBS.writeFile out (encode o)
         extraCommits <- catMaybes <$> mapM predOrSelf (tagsHashes ++ branchHashes)

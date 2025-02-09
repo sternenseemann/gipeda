@@ -24,11 +24,11 @@ graphSummaries benchNames = do
                 revs <- obj .: "revisions"
                 forM (M.elems (revs :: M.Map T.Text Object)) $ \rev -> do
                     results <- rev .: "benchResults"
-                    result <- results .: T.pack bName
+                    result <- results .: stringToKey bName
                     parseJSON result
-        return $ T.pack bName .= object
-                [ T.pack "improvements" .= length [ () | gp <- gps, gpChangeType gp == Improvement ]
-                , T.pack "regressions"  .= length [ () | gp <- gps, gpChangeType gp == Regression]
+        return $ stringToKey bName .= object
+                [ stringToKey "improvements" .= length [ () | gp <- gps, gpChangeType gp == Improvement ]
+                , stringToKey "regressions"  .= length [ () | gp <- gps, gpChangeType gp == Regression]
                 ]
     let o = object [ "graphSummaries" .= object g ]
     BS.putStr $ encode o
